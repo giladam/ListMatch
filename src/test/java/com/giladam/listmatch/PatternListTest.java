@@ -1,5 +1,6 @@
 package com.giladam.listmatch;
 
+import java.util.Collection;
 import java.util.Set;
 
 import org.junit.Assert;
@@ -32,5 +33,177 @@ public class PatternListTest {
 
         Assert.assertFalse(plForEmails.matches("this@has@four@fields.com"));
     }
+
+
+    @Test
+    public void testWildcardStartsWith() {
+
+        Collection<String> patterns = Sets.newHashSet("*something");
+
+        PatternList patternList = new PatternList(patterns, "", false);
+
+        String[] expectedMatches = {"anythingsomething",
+                                    "somethingsomething",
+                                    "這是中國人something"};
+
+        String[] expectedNotMatches = {"somethingsomethingelse",
+                                       "notit",
+                                       null,
+                                       ""};
+
+        for (String expectedMatch : expectedMatches) {
+            Assert.assertTrue("Expected " + expectedMatch + " to match.",
+                              patternList.matches(expectedMatch));
+        }
+
+
+        for (String expectedNotMatch : expectedNotMatches) {
+            Assert.assertFalse("Expected " + expectedNotMatch + " to NOT match.",
+                               patternList.matches(expectedNotMatch));
+        }
+    }
+
+
+    @Test
+    public void testWildcardEndsWith() {
+
+        Collection<String> patterns = Sets.newHashSet("something*");
+
+        PatternList patternList = new PatternList(patterns, "", false);
+
+        String[] expectedMatches = {"somethinganything",
+                                    "somethingsomething",
+                                    "something這是中國人"};
+
+        String[] expectedNotMatches = {"nonesomethingsomethingelse",
+                                       "notit",
+                                       null,
+                                       ""};
+
+        for (String expectedMatch : expectedMatches) {
+            Assert.assertTrue("Expected " + expectedMatch + " to match.",
+                              patternList.matches(expectedMatch));
+        }
+
+
+        for (String expectedNotMatch : expectedNotMatches) {
+            Assert.assertFalse("Expected " + expectedNotMatch + " to NOT match.",
+                               patternList.matches(expectedNotMatch));
+        }
+    }
+
+
+    @Test
+    public void testWildcardAlone() {
+
+        Collection<String> patterns = Sets.newHashSet("*");
+
+        PatternList patternList = new PatternList(patterns, "", false);
+
+        String[] expectedMatches = {"somethinganything",
+                                    "somethingsomething",
+                                    "something這是中國人",
+                                    ""};
+
+        String[] expectedNotMatches = {null};
+
+        for (String expectedMatch : expectedMatches) {
+            Assert.assertTrue("Expected " + expectedMatch + " to match.",
+                              patternList.matches(expectedMatch));
+        }
+
+
+        for (String expectedNotMatch : expectedNotMatches) {
+            Assert.assertFalse("Expected " + expectedNotMatch + " to NOT match.",
+                               patternList.matches(expectedNotMatch));
+        }
+    }
+
+
+    @Test
+    public void testNoWildcardExactValue() {
+
+        Collection<String> patterns = Sets.newHashSet("這是中國人");
+
+        PatternList patternList = new PatternList(patterns, "", false);
+
+        String[] expectedMatches = {"這是中國人"};
+
+        String[] expectedNotMatches = {null,
+                                       "something else",
+                                       "這是不是中國人"};
+
+        for (String expectedMatch : expectedMatches) {
+            Assert.assertTrue("Expected " + expectedMatch + " to match.",
+                              patternList.matches(expectedMatch));
+        }
+
+
+        for (String expectedNotMatch : expectedNotMatches) {
+            Assert.assertFalse("Expected " + expectedNotMatch + " to NOT match.",
+                               patternList.matches(expectedNotMatch));
+        }
+    }
+
+
+
+    @Test
+    public void testWildcardInMiddle() {
+
+        Collection<String> patterns = Sets.newHashSet("www.*.com");
+
+        PatternList patternList = new PatternList(patterns, "", false);
+
+        String[] expectedMatches = {"www.abc123.com",
+                                    "www.더 유니 코드.com",
+                                    "www.www.www.com"};
+
+        String[] expectedNotMatches = {"www.com",
+                                       null,
+                                       "something else",
+                                       "這是不是中國人",
+                                       "123.abc.com",
+                                       "abc.com",
+                                       "",
+                                       };
+
+        for (String expectedMatch : expectedMatches) {
+            Assert.assertTrue("Expected " + expectedMatch + " to match.",
+                              patternList.matches(expectedMatch));
+        }
+
+
+        for (String expectedNotMatch : expectedNotMatches) {
+            Assert.assertFalse("Expected " + expectedNotMatch + " to NOT match.",
+                               patternList.matches(expectedNotMatch));
+        }
+    }
+
+
+
+    @Test
+    public void testUnicodeHandling() {
+
+        Collection<String> patterns = Sets.newHashSet("더 유니 코드.*.더 유니 코드");
+
+        PatternList patternList = new PatternList(patterns, "", false);
+
+        String[] expectedMatches = {"더 유니 코드.abc123.더 유니 코드",
+                                    "더 유니 코드.더 유니 코드.더 유니 코드"};
+
+        String[] expectedNotMatches = {"這是不是中國人.something.這是不是中國人"};
+
+        for (String expectedMatch : expectedMatches) {
+            Assert.assertTrue("Expected " + expectedMatch + " to match.",
+                              patternList.matches(expectedMatch));
+        }
+
+
+        for (String expectedNotMatch : expectedNotMatches) {
+            Assert.assertFalse("Expected " + expectedNotMatch + " to NOT match.",
+                               patternList.matches(expectedNotMatch));
+        }
+    }
+
 
 }

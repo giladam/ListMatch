@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -24,7 +25,8 @@ public class PatternList {
     /**
      * This is a special matching character for the wildcard
      */
-    public static final String WILDCARD = "*";
+    public static final char WILDCARD_CHAR = '*';
+    public static final String WILDCARD = String.valueOf(WILDCARD_CHAR);
 
     private static Logger log = LoggerFactory.getLogger(PatternList.class);
 
@@ -132,7 +134,7 @@ public class PatternList {
 
             boolean allPartsMatch = true;
             for (int i=0; i<valueToTestComponents.length; i++) {
-                boolean componentMatches = matchesPattern(valueToTestComponents[i], listEntryComponents[i]);
+                boolean componentMatches = wildcardMatch(valueToTestComponents[i], listEntryComponents[i]);
                 if (!componentMatches) {
                     return false;
                 }
@@ -156,33 +158,57 @@ public class PatternList {
     }
 
 
-    private boolean matchesPattern(String value, String pattern) {
+    /**
+     * This wildcard matching was adapted from somebody's solution to wildcard matching problem from Leetcode.  It is
+     * not entirely clear who wrote it, but it does work so I changed it a bit for what I needed.
+     *
+     * @param value
+     * @param pattern
+     * @return
+     */
+    private boolean wildcardMatch(String value, String pattern) {
 
-        //if the pattern is all a * then anything matches
-        if (pattern.equals(WILDCARD)) {
+        if (value == null || pattern == null) {
+            return false;
+        }
+
+        if (value.equals(pattern) || pattern.equals(WILDCARD)) {
             return true;
         }
 
-        if (pattern.startsWith(WILDCARD)) { //if the pattern starts with a wildcard,
-            //then everything before its position can be different, but after must be the same.
-            String everythingAfterWildcardInPattern = StringUtils.substringAfter(pattern, WILDCARD);
+        int m = value.length();
+        int n = pattern.length();
+        int posS = 0;
+        int posP = 0;
+        int posStar = -1;
+        int posOfS = -1;
 
-            //so we can just check if the value we have ends with the pattern
-            return StringUtils.endsWith(value,  everythingAfterWildcardInPattern);
-        } else if (pattern.endsWith(WILDCARD)) { //if the pattern ends with a wildcard,
-            int wildcardPositionInPattern = pattern.indexOf(WILDCARD);
-
-            //then everything after its position can be different, but before it must be the same
-            String everythingBeforeWildcardInValueToTest = StringUtils.substring(value, 0, wildcardPositionInPattern);
-            String everythingBeforeWildcardInPattern = StringUtils.substringBefore(pattern, WILDCARD);
-
-            return StringUtils.equals(everythingBeforeWildcardInValueToTest,  everythingBeforeWildcardInPattern);
-        } else { //if the wildcard is in the middle or not at all
-            // then just check full equality
-            return StringUtils.equals(pattern, value);
+        //if posS == posP || ++posS and ++posP.
+        //posOfS, posStar, record the positon of '*' in s and p, ++posP and go on.
+        //if not match, go back to star, ++posOfS
+        while (posS < m) {
+            if (posP < n && (value.charAt(posS) == pattern.charAt(posP))) {
+                ++posS;
+                ++posP;
+            } else if (posP < n && pattern.charAt(posP) == WILDCARD_CHAR) {
+                posStar = posP;
+                posOfS = posS;
+                ++posP;
+                continue;
+            } else if (posStar != -1) {
+                posS = posOfS;
+                posP = posStar + 1;
+                ++posOfS;
+            } else {
+                return false;
+            }
         }
+
+        while (posP < n && pattern.charAt(posP) == WILDCARD_CHAR) {
+            ++posP;
+        }
+
+        return ((posS == m) && (posP == n));
     }
-
-
 
 }
