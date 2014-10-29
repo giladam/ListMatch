@@ -43,3 +43,41 @@ Example usage for managing multiple lists:
 ```
 
 
+
+Matching patterns can look like (example using '@' delimiter for an email patterns list):
+
+```
+
+# Wildcard as email local part:
+*@anylocalpart.com
+
+# Wildcard as email domain part
+anydomain@*
+
+# Exact matches are preferred because they are tested against directly:
+user@domain.com
+
+# Wildcard after some characters:
+startswith*@domain.com
+
+# Wildcard before some characters:
+*endswith@domain.com
+```
+
+
+Matching patterns can also look like (example using '.' delimiter for an ip address list, but I think there are probably
+better libraries out there for IP range handling.):
+
+
+```
+
+# Exact match
+10.100.0.1
+
+# Wildcards in IP ranges:
+10.*.*.*
+
+# Wildcards in IP ranges:
+10.100.0.*
+
+```
