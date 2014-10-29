@@ -29,7 +29,7 @@ public class PatternListEntry {
 
         if (StringUtils.isEmpty(value)) {
             this.components = new String[0];
-        } else if (componentDelimiter == null) {
+        } else if (StringUtils.isEmpty(componentDelimiter)) {
             this.components = new String[]{value};
         } else {
             this.components = value.split(Pattern.quote(componentDelimiter));
