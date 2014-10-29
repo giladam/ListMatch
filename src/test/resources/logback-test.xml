@@ -1,0 +1,14 @@
+<configuration scan="true">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+          <pattern>%d %p [%logger] \(%t\) - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.giladam" level="DEBUG" />
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+</configuration>

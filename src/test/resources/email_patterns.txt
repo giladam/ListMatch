@@ -1,0 +1,5 @@
+*@anylocalpart.com
+anydomain@*
+user@domain.com
+startswith*@domain.com
+*endswith@domain.com

@@ -1,0 +1,16 @@
+# startswith@comment.com
+     # spaces_in_front@comment.com
+
+#Blank lines in there, too.
+
+#No whitespace around comment character
+
+#Whitespace in line below this one:
+    
+               
+# This line has #two comment characters!      
+    
+#These three are the ONLY ones that should be in:
+comments_after_with_whitespace_after@test.com           #comments here, but after the entry.
+comments_after_without_whitespace_after@test.com#comments here, but after the entry.
+nocomments@test.com
