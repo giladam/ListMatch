@@ -52,11 +52,11 @@ public class ListMatcher {
      *
      * @throws IOException
      */
-    public static Set<String> readPatternsFromFile(File whiteListFile) throws IOException {
+    public static Set<String> readPatternsFromFile(File patternsFile) throws IOException {
 
         Set<String> patternsFound = new HashSet<>();
 
-        try (BufferedReader fileReader = Files.newBufferedReader(whiteListFile.toPath(), UTF_8)) {
+        try (BufferedReader fileReader = Files.newBufferedReader(patternsFile.toPath(), UTF_8)) {
             String line = null;
             while ((line = fileReader.readLine()) != null) {
 
