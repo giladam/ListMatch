@@ -3,6 +3,16 @@ ListMatcher
 
 Library for performing blacklist/whitelist matching operations for things like email addresses.
 
+Maven Dependency:
+
+```xml
+<dependency>
+  <groupId>com.giladam</groupId>
+  <artifactId>ListMatch</artifactId>
+  <version>1.0.4</version>
+</dependency>
+```
+
 
 Example usage for managing single list:
 
