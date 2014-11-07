@@ -126,30 +126,31 @@ public class PatternList {
             String[] listEntryComponents = listEntry.getComponents();
             String[] valueToTestComponents = valueToTest.getComponents();
 
-            //if the entry is incompatible with the value to test, it's not a match:
-            if (listEntryComponents.length != valueToTestComponents.length) {
-                return false;
-            }
+            //if the entry is incompatible with the value to test, it's not a match so don't try:
+            if (listEntryComponents.length == valueToTestComponents.length) {
 
-            boolean allPartsMatch = true;
-            for (int i=0; i<valueToTestComponents.length; i++) {
-                boolean componentMatches = wildcardMatch(valueToTestComponents[i], listEntryComponents[i]);
-                if (!componentMatches) {
-                    return false;
-                }
-            }
+                boolean foundNonMatchingComponent = false;
 
-            if (allPartsMatch) {
-                if (log.isDebugEnabled()) {
-                    log.debug("Found match for [{}] with pattern {}", valueToCheck, listEntry);
+                for (int i=0; i<valueToTestComponents.length && (!foundNonMatchingComponent); i++) {
+                    //does the component match?
+                    if (!wildcardMatch(valueToTestComponents[i], listEntryComponents[i])) {
+                        foundNonMatchingComponent = true;
+                    }
                 }
 
-                return true;
+                if (!foundNonMatchingComponent) {
+                    if (log.isDebugEnabled()) {
+                        log.debug("Found match for [{}] with pattern {}", valueToCheck, listEntry);
+                    }
+
+                    return true;
+                }
             }
         }
 
         return false;
     }
+
 
 
     private static boolean containsSpecialMatchingCharacters(String value) {

@@ -222,4 +222,38 @@ public class ListMatcherEmailPatternsTest {
         }
     }
 
+
+
+    @Test
+    public void testEmailPattern_WildcardUser() {
+
+        Set<String> patterns = Sets.newHashSet("*@example.com",
+                                               "*@another.com",
+                                               "*@a-third.com");
+
+        ListMatcher listMatcher = setupWithEmailPatterns(patterns, false);
+
+        String[] expectedMatches = {"TEST@example.com",
+                                    "USER@another.com",
+                                    "me@a-third.com"};
+
+        String[] expectedNotMatches = {"test@notexample.com",
+                                       "user@domain.com"};
+
+        for (String emailAddressToTest : expectedMatches) {
+            Assert.assertTrue(
+                    "Expected " + emailAddressToTest + " to match.",
+                    listMatcher.matchesList(EMAIL_PATTERNS, emailAddressToTest)
+            );
+        }
+
+
+        for (String emailAddressToTest : expectedNotMatches) {
+            Assert.assertFalse(
+                    "Expected " + emailAddressToTest + " to NOT match.",
+                    listMatcher.matchesList(EMAIL_PATTERNS, emailAddressToTest)
+            );
+        }
+    }
+
 }
