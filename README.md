@@ -91,3 +91,20 @@ better libraries out there for IP range handling.):
 10.100.0.*
 
 ```
+
+
+
+Matching patterns can also have no delimiter for components like (example using "" or null for delimiter for an url list):
+
+```
+
+# Exact match
+https://www.example.com/specific.html
+
+# Wildcards in urls:
+http://www.example.com/allowed/*
+
+# Wildcards in the middle and end:
+http://*.edu/*
+
+```
