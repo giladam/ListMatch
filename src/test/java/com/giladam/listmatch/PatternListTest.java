@@ -51,16 +51,7 @@ public class PatternListTest {
                                        null,
                                        ""};
 
-        for (String expectedMatch : expectedMatches) {
-            Assert.assertTrue("Expected " + expectedMatch + " to match.",
-                              patternList.matches(expectedMatch));
-        }
-
-
-        for (String expectedNotMatch : expectedNotMatches) {
-            Assert.assertFalse("Expected " + expectedNotMatch + " to NOT match.",
-                               patternList.matches(expectedNotMatch));
-        }
+        TestingUtil.assertMatchingCorrectly(patternList, expectedMatches, expectedNotMatches);
     }
 
 
@@ -80,16 +71,7 @@ public class PatternListTest {
                                        null,
                                        ""};
 
-        for (String expectedMatch : expectedMatches) {
-            Assert.assertTrue("Expected " + expectedMatch + " to match.",
-                              patternList.matches(expectedMatch));
-        }
-
-
-        for (String expectedNotMatch : expectedNotMatches) {
-            Assert.assertFalse("Expected " + expectedNotMatch + " to NOT match.",
-                               patternList.matches(expectedNotMatch));
-        }
+        TestingUtil.assertMatchingCorrectly(patternList, expectedMatches, expectedNotMatches);
     }
 
 
@@ -107,16 +89,7 @@ public class PatternListTest {
 
         String[] expectedNotMatches = {null};
 
-        for (String expectedMatch : expectedMatches) {
-            Assert.assertTrue("Expected " + expectedMatch + " to match.",
-                              patternList.matches(expectedMatch));
-        }
-
-
-        for (String expectedNotMatch : expectedNotMatches) {
-            Assert.assertFalse("Expected " + expectedNotMatch + " to NOT match.",
-                               patternList.matches(expectedNotMatch));
-        }
+        TestingUtil.assertMatchingCorrectly(patternList, expectedMatches, expectedNotMatches);
     }
 
 
@@ -133,16 +106,7 @@ public class PatternListTest {
                                        "something else",
                                        "這是不是中國人"};
 
-        for (String expectedMatch : expectedMatches) {
-            Assert.assertTrue("Expected " + expectedMatch + " to match.",
-                              patternList.matches(expectedMatch));
-        }
-
-
-        for (String expectedNotMatch : expectedNotMatches) {
-            Assert.assertFalse("Expected " + expectedNotMatch + " to NOT match.",
-                               patternList.matches(expectedNotMatch));
-        }
+        TestingUtil.assertMatchingCorrectly(patternList, expectedMatches, expectedNotMatches);
     }
 
 
@@ -167,16 +131,7 @@ public class PatternListTest {
                                        "",
                                        };
 
-        for (String expectedMatch : expectedMatches) {
-            Assert.assertTrue("Expected " + expectedMatch + " to match.",
-                              patternList.matches(expectedMatch));
-        }
-
-
-        for (String expectedNotMatch : expectedNotMatches) {
-            Assert.assertFalse("Expected " + expectedNotMatch + " to NOT match.",
-                               patternList.matches(expectedNotMatch));
-        }
+        TestingUtil.assertMatchingCorrectly(patternList, expectedMatches, expectedNotMatches);
     }
 
 
@@ -193,16 +148,7 @@ public class PatternListTest {
 
         String[] expectedNotMatches = {"這是不是中國人.something.這是不是中國人"};
 
-        for (String expectedMatch : expectedMatches) {
-            Assert.assertTrue("Expected " + expectedMatch + " to match.",
-                              patternList.matches(expectedMatch));
-        }
-
-
-        for (String expectedNotMatch : expectedNotMatches) {
-            Assert.assertFalse("Expected " + expectedNotMatch + " to NOT match.",
-                               patternList.matches(expectedNotMatch));
-        }
+        TestingUtil.assertMatchingCorrectly(patternList, expectedMatches, expectedNotMatches);
     }
 
 

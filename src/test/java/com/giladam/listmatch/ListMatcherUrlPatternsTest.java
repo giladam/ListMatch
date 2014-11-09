@@ -2,7 +2,6 @@ package com.giladam.listmatch;
 
 import java.util.Collection;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.collect.Sets;
@@ -31,16 +30,7 @@ public class ListMatcherUrlPatternsTest {
                                        "http://www.example.com/notallowed.html",
                                        "https://www.example.com/allowed.html"};
 
-        for (String expectedMatch : expectedMatches) {
-            Assert.assertTrue("Expected " + expectedMatch + " to match.",
-                              patternList.matches(expectedMatch));
-        }
-
-
-        for (String expectedNotMatch : expectedNotMatches) {
-            Assert.assertFalse("Expected " + expectedNotMatch + " to NOT match.",
-                               patternList.matches(expectedNotMatch));
-        }
+        TestingUtil.assertMatchingCorrectly(patternList, expectedMatches, expectedNotMatches);
     }
 
 
@@ -66,17 +56,94 @@ public class ListMatcherUrlPatternsTest {
                                        "http://www.example.com/notallowed.html",
                                        "https://www.example.com/allowed.html"};
 
-        for (String expectedMatch : expectedMatches) {
-            Assert.assertTrue("Expected " + expectedMatch + " to match.",
-                              patternList.matches(expectedMatch));
-        }
-
-
-        for (String expectedNotMatch : expectedNotMatches) {
-            Assert.assertFalse("Expected " + expectedNotMatch + " to NOT match.",
-                               patternList.matches(expectedNotMatch));
-        }
+        TestingUtil.assertMatchingCorrectly(patternList, expectedMatches, expectedNotMatches);
     }
 
+
+
+    @Test
+    public void testUrlPatternHandling_WildcardsInBeginning() {
+
+        Collection<String> patterns = Sets.newHashSet("*://www.anyprotocol.com",
+                                                      "*/robots.txt");
+
+        PatternList patternList = new PatternList(patterns, null, false);
+
+        String[] expectedMatches = {"http://www.anyprotocol.com",
+                                    "https://www.anyprotocol.com",
+                                    "ftp://www.anyprotocol.com",
+                                    "http://www.examples.com/something/nested/deep/robots.txt",
+                                    "https://www.examples.com/robots.txt",
+                                    "ftp://www.examples.com/robots.txt"};
+
+        String[] expectedNotMatches = {"10.100.1.0",
+                                       "test@example.com",
+                                       "http://www.notexample.com",
+                                       "https://www.notexample.com",
+                                       "https://www.examples.com/robots.txt.bak",};
+
+        TestingUtil.assertMatchingCorrectly(patternList, expectedMatches, expectedNotMatches);
+    }
+
+
+    @Test
+    public void testUrlPatternHandling_WildcardsInMiddle_Single() {
+
+        Collection<String> patterns = Sets.newHashSet("http*://www.example-https-or-http.com");
+
+        PatternList patternList = new PatternList(patterns, null, false);
+
+        String[] expectedMatches = {"https://www.example-https-or-http.com",
+                                    "httpz://www.example-https-or-http.com",
+                                    "http://www.example-https-or-http.com",
+                                    "httpabcdefg://www.example-https-or-http.com"};
+
+        String[] expectedNotMatches = {"httpabc-//www.example-https-or-http.com"};
+
+        TestingUtil.assertMatchingCorrectly(patternList, expectedMatches, expectedNotMatches);
+    }
+
+
+    @Test
+    public void testUrlPatternHandling_WildcardsInMiddle_Multiple() {
+
+        Collection<String> patterns = Sets.newHashSet("http://www.*.com/*/something.html");
+
+        PatternList patternList = new PatternList(patterns, null, false);
+
+        String[] expectedMatches = {"http://www.example.com/anythingok/something.html",
+                                    "http://www.test.com/anythingok/something.html",
+                                    "http://www.test2.com/2/something.html"};
+
+        String[] expectedNotMatches = {"http://hello.example.com/anythingok/something.html",
+                                       "http://hello.example.com/anythingok/notsomething.html",
+                                       "http://www.example.com/anythingok/notsomething.html"};
+
+        TestingUtil.assertMatchingCorrectly(patternList, expectedMatches, expectedNotMatches);
+    }
+
+
+    @Test
+    public void testUrlPatternHandling_WildcardsInBeginningMiddleAndEnd() {
+
+        Collection<String> patterns = Sets.newHashSet("*www.*.com*");
+
+        PatternList patternList = new PatternList(patterns, null, false);
+
+        String[] expectedMatches = {"http://www.example.com/anythingok/something.html",
+                                    "ftp://www.test.com/anythingok/something.html",
+                                    "https://www.test2.com/2/something.html",
+                                    "http://www.example.com",
+                                    "www.example.com",
+                                    "www.somethingelse.com"};
+
+        String[] expectedNotMatches = {"http://www.example.edu/anythingok/something.html",
+                                       "https://hello.example.com/anythingok/notsomething.html",
+                                       "http://www.example.edu",
+                                       "notallowed.somethingelse.com",
+                                       "notallowed.somethingelse.edu/test.thml"};
+
+        TestingUtil.assertMatchingCorrectly(patternList, expectedMatches, expectedNotMatches);
+    }
 
 }

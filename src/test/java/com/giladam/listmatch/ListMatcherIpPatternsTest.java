@@ -2,7 +2,6 @@ package com.giladam.listmatch;
 
 import java.util.Collection;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.collect.Sets;
@@ -30,16 +29,7 @@ public class ListMatcherIpPatternsTest {
                                        "10.100.0.2",
                                        "10.100.1.0"};
 
-        for (String expectedMatch : expectedMatches) {
-            Assert.assertTrue("Expected " + expectedMatch + " to match.",
-                              patternList.matches(expectedMatch));
-        }
-
-
-        for (String expectedNotMatch : expectedNotMatches) {
-            Assert.assertFalse("Expected " + expectedNotMatch + " to NOT match.",
-                               patternList.matches(expectedNotMatch));
-        }
+        TestingUtil.assertMatchingCorrectly(patternList, expectedMatches, expectedNotMatches);
     }
 
 
