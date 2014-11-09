@@ -1,7 +1,10 @@
 ListMatcher
 =========
 
+[![Coverage Status](https://coveralls.io/repos/giladam/ListMatch/badge.png?branch=1.1)](https://coveralls.io/r/giladam/ListMatch?branch=1.1)
+
 Library for performing blacklist/whitelist matching operations for things like email addresses.
+
 
 Maven Dependency:
 
@@ -12,7 +15,6 @@ Maven Dependency:
   <version>1.0.5</version>
 </dependency>
 ```
-
 
 
 Example usage for managing single list:
