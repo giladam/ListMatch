@@ -100,7 +100,7 @@ public class PatternList {
      */
     public boolean matches(String value) {
 
-        //if there's nothing to check, it can't be in the whitelist
+        //if there's nothing to check, it can't be in the allowlist
         if (value == null) {
             return false;
         }

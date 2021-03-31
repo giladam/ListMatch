@@ -1,9 +1,7 @@
 ListMatcher
 =========
 
-[![Coverage Status](https://coveralls.io/repos/giladam/ListMatch/badge.png?branch=1.1)](https://coveralls.io/r/giladam/ListMatch?branch=1.1)
-
-Library for performing blacklist/whitelist matching operations for things like email addresses.
+Library for performing denylist/allowlist matching operations for things like email addresses.
 
 
 Maven Dependency:
@@ -22,12 +20,12 @@ Example usage for managing single list:
 ```java
     
     //load some patterns from a text file:
-    Set<String> whiteListPatterns = ListMatcher.readPatternsFromFile(new File("/tmp/someWhitelist.txt"));
+    Set<String> allowListPatterns = ListMatcher.readPatternsFromFile(new File("/tmp/allow.txt"));
 
-    PatternList patternList = new PatternList(whiteListPatterns, "@", false);
+    PatternList patternList = new PatternList(allowListPatterns, "@", false);
         
     //do some matching:
-    boolean inWhitelist = patternList.matches("test@example.com");
+    boolean inAllowlist = patternList.matches("test@example.com");
 ```
 
 
@@ -36,8 +34,8 @@ Example usage for managing multiple lists:
 ```java
     
     //load some patterns from a text file:
-    Set<String> whiteListPatterns = ListMatcher.readPatternsFromFile(new File("/tmp/someWhitelist.txt"));
-    Set<String> blackListPatterns = ListMatcher.readPatternsFromFile(new File("/tmp/someBlacklist.txt"));
+    Set<String> allowListPatterns = ListMatcher.readPatternsFromFile(new File("/tmp/someAllowlist.txt"));
+    Set<String> denyListPatterns = ListMatcher.readPatternsFromFile(new File("/tmp/someDenylist.txt"));
 
     //some options
     boolean caseSensitive = false;
@@ -45,14 +43,14 @@ Example usage for managing multiple lists:
     //If you have multiple lists to manage:
     Map<String,PatternList> listByName = new HashMap<>();
 
-    listByName.put("email.whitelist", new PatternList(whiteListPatterns, "@", caseSensitive));
-    listByName.put("email.blacklist", new PatternList(whiteListPatterns, "@", caseSensitive));
+    listByName.put("email.allowlist", new PatternList(allowListPatterns, "@", caseSensitive));
+    listByName.put("email.denylist", new PatternList(denyListPatterns, "@", caseSensitive));
 
     ListMatcher listMatcher = new ListMatcher(listByName);
     
     //do some matching:
-    boolean inWhitelist = listMatcher.matchesList("email.whitelist", "test@example.com");
-    boolean inBlacklist = listMatcher.matchesList("email.blacklist", "test@example.com");
+    boolean inAllowlist = listMatcher.matchesList("email.allowlist", "test@example.com");
+    boolean inDenylist = listMatcher.matchesList("email.denylist", "test@example.com");
 ```
 
 
