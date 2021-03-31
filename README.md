@@ -10,7 +10,7 @@ Maven Dependency:
 <dependency>
   <groupId>com.giladam</groupId>
   <artifactId>ListMatch</artifactId>
-  <version>1.0.5</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 
